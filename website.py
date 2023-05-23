@@ -50,6 +50,7 @@ def login():
         password = request.form['password']
         try:
             session['user_id'] = form.validate_login(email, password)
+            session['cart'] = []
             return redirect(url_for('home'))
         except Exception as e:
             print(e)
@@ -68,6 +69,7 @@ def register():
         try:
             form.validate_email(email)
             session['user_id'] = form.add_email(email, first_name, password)
+            session['cart'] = []
             return redirect(url_for('home'))
         except Exception as e:
             print(e)
@@ -84,8 +86,7 @@ def home():
     html_table_format = []
     raw = test_database.getAllProducts()
     #for x in raw:
-        
-    return render_template('main.html', products=test_database.getAllProducts())
+    return render_template('main.html', products=test_database.getAllProducts(), cartSize=session['cart'])
 
 if __name__ == '__main__':
     app.run(debug=True)

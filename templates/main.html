@@ -8,7 +8,15 @@
 
 <body>
     <div class="text-right">
+        <a href="{{url_for('logout')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('logout')}}">Settings</a><br>
         <a href="{{url_for('logout')}}">Sign out</a><br>
+        <style>
+            h1 {
+                text-align: center;
+            }
+        </style>
+        <h1>Ikea Furniture Website</h1>
     </div>
     <style>
         h1 {
