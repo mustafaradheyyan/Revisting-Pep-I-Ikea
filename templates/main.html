@@ -6,9 +6,30 @@
 </head>
 
 <body>
+    <style>
+        h1 {text-align: center;}
+    </style>
     <h1>Ikea Furniture Website</h1>
-    <a href="{{url_for('login')}}">Already have an account? Log in</a><br>
-    <a href="{{url_for('register')}}">Don't have an account? Sign up</a><br>
+    <a href="{{url_for('logout')}}">Click here to sign out</a><br>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>&emsp;&emsp;&ensp;&nbsp;Name</th>
+            <th>&emsp;Price</th>
+            <th>&emsp;Description</th>
+        </tr>
+    </table>
+    {% for product in products %}
+    <table>
+        <tr>
+            <td>{{product[0]}}</td>
+            <td>&emsp;{{product[1]}}</td>
+            <td>&emsp;${{product[3]}}</td>
+            <td>&emsp;{{product[6]}}</td>
+        </tr>
+    </table>
+    {% endfor %}
 </body>
 
 </html>

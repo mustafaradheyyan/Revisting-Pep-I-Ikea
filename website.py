@@ -10,7 +10,7 @@ app.secret_key = 'temp'
 
 class RegisterForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Length(min=4, max=50)], render_kw={'placeholder': 'Email'})
-    first_name = StringField(validators=[InputRequired(), Length(min=4, max=50)], render_kw={'placeholder': 'First Name'})
+    first_name = StringField(validators=[InputRequired(), Length(min=1, max=50)], render_kw={'placeholder': 'First Name'})
     password = PasswordField(validators=[InputRequired(), Length(min=4, max=50)], render_kw={'placeholder': 'Password'})
     submit = SubmitField("Register")
 
@@ -26,20 +26,40 @@ class LoginForm(FlaskForm):
     password = PasswordField(validators=[InputRequired(), Length(min=4, max=50)], render_kw={'placeholder': 'Password'})
     submit = SubmitField("Login")
 
+    def validate_login(self, email, password):
+        user = test_database.loginCustomer(email, password)
+        if user is None:
+            raise ValidationError("Login failed. Please check your email and password again.")
+        else:
+            return user
+
 @app.route("/")
-def home():
+def start():
     if 'user_id' in session:
-        return render_template('main.html')
+        return redirect(url_for('home'))
     else:
         return redirect(url_for('login'))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if 'user_id' in session:
+        return redirect(url_for('home'))
     form = LoginForm()
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            session['user_id'] = form.validate_login(email, password)
+            return redirect(url_for('home'))
+        except Exception as e:
+            print(e)
+
     return render_template('login.html', form=form)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if 'user_id' in session:
+        return redirect(url_for('home'))
     form = RegisterForm()
     if request.method == 'POST':
         email = request.form['email']
@@ -47,7 +67,8 @@ def register():
         password = request.form['password']
         try:
             form.validate_email(email)
-            form.add_email(email, first_name, password)
+            session['user_id'] = form.add_email(email, first_name, password)
+            return redirect(url_for('home'))
         except Exception as e:
             print(e)
             
@@ -55,7 +76,16 @@ def register():
 
 @app.route("/logout")
 def logout():
-    pass
+    session.clear()
+    return redirect(url_for('login'))
+
+@app.route("/home")
+def home():
+    html_table_format = []
+    raw = test_database.getAllProducts()
+    #for x in raw:
+        
+    return render_template('main.html', products=test_database.getAllProducts())
 
 if __name__ == '__main__':
     app.run(debug=True)
