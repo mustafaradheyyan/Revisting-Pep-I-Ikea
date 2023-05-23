@@ -12,7 +12,7 @@ class RegisterForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Length(min=4, max=50)], render_kw={'placeholder': 'Email'})
     first_name = StringField(validators=[InputRequired(), Length(min=4, max=50)], render_kw={'placeholder': 'First Name'})
     password = PasswordField(validators=[InputRequired(), Length(min=4, max=50)], render_kw={'placeholder': 'Password'})
-    submit = SubmitField("Register", validators=[InputRequired()])
+    submit = SubmitField("Register")
 
     def validate_email(self, email):
         if not test_database.checkEmail(email):
@@ -47,8 +47,7 @@ def register():
         password = request.form['password']
         try:
             form.validate_email(email)
-            print('not in exception')
-            print(form.add_email(email, first_name, password))
+            form.add_email(email, first_name, password)
         except Exception as e:
             print(e)
             
