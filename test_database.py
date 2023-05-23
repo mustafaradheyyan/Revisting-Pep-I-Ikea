@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine, text
+import dbconn
 
-db_username = 'admin'
-db_password = 'ikeasolutionsarchitect'
-db_host = 'revisiting-pep-i-ikea.c5lobpudlayi.us-west-1.rds.amazonaws.com:3306'
-db_name = 'ikea_products'
+db_username = dbconn.db_username
+db_password = dbconn.db_password
+db_host = dbconn.db_host
+db_name = dbconn.db_name
 
 db_url = f'mysql+mysqlconnector://{db_username}:{db_password}@{db_host}/{db_name}'
 
