@@ -15,7 +15,7 @@ result = conn.execute(text("select * from customers"))
 for person in result:
     print(person[0])
 
-def getCustomer(email, password):
+def loginCustomer(email, password):
     result = conn.execute(text(f"select customer_id from customers where email = '{email}' AND customer_pass = {password}"))
     return_id = 0
     for res in result:
@@ -30,8 +30,11 @@ def checkEmail(email):
     else:
         return False
     
-
+def getAllProducts():
+    result = conn.execute(text(f"select * from products"))
+    return [r for r in result]
+    
 
 if __name__ == '__main__':
-    getCustomer('test@gmail.com','12345')
+    loginCustomer('test@gmail.com','12345')
     print(checkEmail('test123123@gmail.com'))
