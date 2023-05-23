@@ -16,7 +16,7 @@ for person in result:
     print(person[0])
 
 def loginCustomer(email, password):
-    result = conn.execute(text(f"select customer_id from customers where email = '{email}' AND customer_pass = {password}"))
+    result = conn.execute(text(f"select customer_id from customers where email = '{email}' AND customer_pass = '{password}'"))
     return_id = 0
     for res in result:
         return_id = res[0]
@@ -33,7 +33,10 @@ def checkEmail(email):
 def getAllProducts():
     result = conn.execute(text(f"select * from products"))
     return [r for r in result]
-    
+
+def getCustomerInfo(cust_id):
+    result = conn.execute(text(f"select * from customers where customer_id = {cust_id}"))
+    return [r for r in result]
 
 if __name__ == '__main__':
     loginCustomer('test@gmail.com','12345')

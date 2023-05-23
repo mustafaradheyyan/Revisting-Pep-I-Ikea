@@ -7,27 +7,29 @@
 </head>
 
 <body>
+    <div class="text-right">
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+    </div>
     <style>
         h1 {
             text-align: center;
         }
     </style>
     <h1>Ikea Furniture Website</h1>
-    <a href="{{url_for('logout')}}">Click here to sign out</a><br>
 
-    <table>
+    <table class="center">
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Price</th>
             <th id="description">Description</th>
+            <th>Price</th>
         </tr>
         {% for product in products %}
         <tr>
             <td>{{product[0]}}</td>
             <td>{{product[1]}}</td>
-            <td>${{product[3]}}</td>
             <td id="description">{{product[6]}}</td>
+            <td>${{product[3]}}</td>
         </tr>
         {% endfor %}
     </table>
