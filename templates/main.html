@@ -8,7 +8,7 @@
 
 <body>
     <div class="text-right">
-        <a href="{{url_for('logout')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('cart')}}">Cart ({{(cart|length)}})</a><br>
         <a href="{{url_for('logout')}}">Settings</a><br>
         <a href="{{url_for('logout')}}">Sign out</a><br>
         <style>
@@ -18,12 +18,6 @@
         </style>
         <h1>Ikea Furniture Website</h1>
     </div>
-    <style>
-        h1 {
-            text-align: center;
-        }
-    </style>
-    <h1>Ikea Furniture Website</h1>
 
     <table class="center">
         <tr>
@@ -34,7 +28,7 @@
         </tr>
         {% for product in products %}
         <tr>
-            <td>{{product[0]}}</td>
+            <td><a href="{{url_for('product', id=product[0])}}">{{product[0]}}</a></td>
             <td>{{product[1]}}</td>
             <td id="description">{{product[6]}}</td>
             <td>${{product[3]}}</td>
