@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/product.css') }}">
+    <title>Main</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('cart')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('logout')}}">Settings</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+        <h1>{{product[0][1]}} - ${{product[0][2]}}</h1>
+    </div>
+
+    <table class="table-center">
+        <tr>
+            <th>ID</th>
+            <td>{{product[0][0]}}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{product[0][4]}}</td>
+        </tr>
+        <tr>
+            <th>Desginer</th>
+            <td>{{product[0][5]}}</td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td>{{product[0][6]}}</td>
+        </tr>
+    </table><br>
+
+    <img class="image-center" src="{{product[0][3]}}" alt="{{product[0][1]}}">
+
+    <div class="text-center">
+        <form method="post">
+            <input type="submit" value="Add to Cart" name="add_cart_button"><br><br>
+        </form>
+        <a href="{{url_for('home')}}">Back</a><br>
+    </div>
+</body>

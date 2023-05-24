@@ -140,9 +140,9 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         try:
-            session["user_id"] = form.validate_login(email, password)
-            session["cart"] = []
-            return redirect(url_for(session["redirect"]))
+            session['user_id'] = form.validate_login(email, password)
+            session['cart'] = list()
+            return redirect(url_for('home'))
         except Exception as e:
             print(e)
 
@@ -162,9 +162,9 @@ def register():
         password = request.form["password"]
         try:
             form.validate_email(email)
-            session["user_id"] = form.add_email(email, first_name, password)
-            session["cart"] = []
-            return redirect(url_for("home"))
+            session['user_id'] = form.add_email(email, first_name, password)
+            session['cart'] = list()
+            return redirect(url_for('home'))
         except Exception as e:
             print(e)
 
@@ -181,19 +181,25 @@ def logout():
 
 @app.route("/home")
 def home():
-    html_table_format = []
-    raw = test_database.getAllProducts()
-    # for x in raw:
-    if "cart" in session:
-        return render_template(
-            "main.html",
-            products=test_database.getAllProducts(),
-            cartSize=session["cart"],
-        )
-    else:
-        return render_template("main.html", products=test_database.getAllProducts())
+    #for x in raw:
+    return render_template('main.html', products=test_database.getAllProducts(), cart=session['cart'])
 
+@app.route("/product/<id>", methods=["GET", "POST"])
+def product(id):
+    if request.method == 'POST':
+        if request.form.get('add_cart_button') == 'Add to Cart':
+            adding_to_cart = session['cart']
+            adding_to_cart.append(id)
+            session['cart'] = adding_to_cart
+            return redirect(url_for('home'))
+        
+    return render_template('product.html', product=test_database.getProduct(id), cart=session['cart'])
 
+@app.route("/cart")
+def cart():
+    return render_template('cart.html', cart=session['cart'])
 
+  
+  
 if __name__ == "__main__":
     app.run(debug=True)
