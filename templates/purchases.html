@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+    <title>Main</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('logout')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('logout')}}">Settings</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+    </div>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <h1>My Purchase History</h1>
+
+    <table class="center">
+        <tr>
+            <th>Name</th>
+            <th>
+                <form method="POST">Price <input name="sort_parameter" value="price" type="hidden" /><input
+                        name="sort_method" value="{{sorted_status[0]}}"
+                        type="hidden" /><button>{{sorted_status[0]}}<br></button>
+                </form>
+            </th>
+            <th><form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" /><input
+                name="sort_method" value="{{sorted_status[1]}}"
+                type="hidden" /><button>{{sorted_status[1]}}<br></button>
+        </form></th>
+        <th><form method="POST">Quantity <input name="sort_parameter" value="product_quantity" type="hidden" /><input
+            name="sort_method" value="{{sorted_status[2]}}"
+            type="hidden" /><button>{{sorted_status[2]}}<br></button>
+    </form></th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{product[0]}}</td>
+            <td>{{product[1]}}</td>
+            <td>{{product[2]}}</td>
+            <td>{{product[3]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
