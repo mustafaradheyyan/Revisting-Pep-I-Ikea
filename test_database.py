@@ -65,11 +65,15 @@ def getAllReviews(user_id, sort_parameter=None, sort_method=None):
     return result_list
 
 
-def getAllPurchases(user_id, sort_parameter=None, sort_method=None):
-    sql_sort_method_string = "asc" if sort_method == "🔼" else "desc"
-    sql_purchase_order_by_string = (
-        f" order by {sort_parameter} {sql_sort_method_string}" if sort_parameter else ""
-    )
+def getAllPurchases(user_id, sort_parameter=None, sort_method=None, query=None):
+    if not query:
+        sql_sort_method_string = "asc" if sort_method == "🔼" else "desc"
+        sql_purchase_order_by_string = (
+            f" order by {sort_parameter} {sql_sort_method_string}" if sort_parameter else ""
+        )
+    else:
+        sql_purchase_order_by_string = f" and category_name LIKE '%{query}%'"
+        
     sql_review_string = (
         f"select name, price, category_name, product_quantity from customer_products join products using(product_id)\
  join product_categories using(category_id) where customer_id = {user_id}"

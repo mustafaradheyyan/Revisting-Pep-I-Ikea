@@ -96,6 +96,7 @@ def purchase_history():
         sorted_status = ["🔽", "🔽"]
         sort_parameter = None
         sort_method = None
+        query_parameter = ""
         
         if request.method == "POST":
             sort_parameter = request.form["sort_parameter"]
@@ -105,13 +106,16 @@ def purchase_history():
                 case "price":
                     sorted_status = ["🔽" if "🔽" != sort_method else "🔼", "🔽", "🔽"]
                 case "category_name":
-                    sorted_status = ["🔽", "🔽" if "🔽" != sort_method else "🔼", "🔽"]
+                    query_parameter = request.form["query"]
+                    print(query_parameter)
+                    if not query_parameter:
+                        sorted_status = ["🔽", "🔽" if "🔽" != sort_method else "🔼", "🔽"]
                 case "product_quantity":
                     sorted_status = ["🔽", "🔽", "🔽" if "🔽" != sort_method else "🔼"]
         
-        purchase_history = test_database.getAllPurchases(session["user_id"], sort_parameter, sort_method)
+        purchase_history = test_database.getAllPurchases(session["user_id"], sort_parameter, sort_method, query_parameter)
 
-        return render_template("purchases.html", products=purchase_history, sorted_status=sorted_status)
+        return render_template("purchases.html", products=purchase_history, sorted_status=sorted_status, query=query_parameter)
     else:
         session["redirect"] = "purchase_history"
         return redirect(url_for("login"))

@@ -28,14 +28,18 @@
                         type="hidden" /><button>{{sorted_status[0]}}<br></button>
                 </form>
             </th>
-            <th><form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" /><input
-                name="sort_method" value="{{sorted_status[1]}}"
-                type="hidden" /><button>{{sorted_status[1]}}<br></button>
-        </form></th>
-        <th><form method="POST">Quantity <input name="sort_parameter" value="product_quantity" type="hidden" /><input
-            name="sort_method" value="{{sorted_status[2]}}"
-            type="hidden" /><button>{{sorted_status[2]}}<br></button>
-    </form></th>
+            <th>
+                <form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" /><input
+                        name="sort_method" value="{{sorted_status[1]}}" type="hidden" /><input name="query" value="{{query}}"
+                        type="text" />&nbsp;<button>{{sorted_status[1]}}<br></button>
+                </form>
+            </th>
+            <th>
+                <form method="POST">Quantity <input name="sort_parameter" value="product_quantity"
+                        type="hidden" /><input name="sort_method" value="{{sorted_status[2]}}"
+                        type="hidden" /><button>{{sorted_status[2]}}<br></button>
+                </form>
+            </th>
         </tr>
         {% for product in products %}
         <tr>
