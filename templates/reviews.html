@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+    <title>Main</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('logout')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('logout')}}">Settings</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+    </div>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <h1>My Ikea Reviews</h1>
+
+    <table class="center">
+        <tr>
+            <th>Name</th>
+            <th>
+                <form method="POST">Price <input name="sort_parameter" value="price" type="hidden" /><input
+                        name="sort_method" value="{{sorted_status[0]}}"
+                        type="hidden" /><button>{{sorted_status[0]}}<br></button>
+                </form>
+            </th>
+            <th>
+                <form method="POST">Review <input name="sort_parameter" value="num_stars" type="hidden" /><input
+                        name="sort_method" value="{{sorted_status[1]}}" type="hidden" />
+                    <button>{{sorted_status[1]}}<br></button>
+                </form>
+            </th>
+        </tr>
+        {% for review in reviews %}
+        <tr>
+            <td>{{review[0]}}</td>
+            <td>{{review[1]}}</td>
+            <td>{{review[2]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
