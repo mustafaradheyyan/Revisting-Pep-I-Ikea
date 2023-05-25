@@ -107,7 +107,6 @@ def purchase_history():
                     sorted_status = ["🔽" if "🔽" != sort_method else "🔼", "🔽", "🔽"]
                 case "category_name":
                     query_parameter = request.form["query"]
-                    print(query_parameter)
                     if not query_parameter:
                         sorted_status = ["🔽", "🔽" if "🔽" != sort_method else "🔼", "🔽"]
                 case "product_quantity":
@@ -134,7 +133,10 @@ def start():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if "user_id" in session:
-        return redirect(url_for("home"))
+        if "redirect" in session:
+            return redirect(url_for(session["redirect"]))
+        else:
+            return redirect(url_for("home"))
     form = LoginForm()
     if request.method == "POST":
         email = request.form["email"]
@@ -142,7 +144,10 @@ def login():
         try:
             session['user_id'] = form.validate_login(email, password)
             session['cart'] = list()
-            return redirect(url_for('home'))
+            if "redirect" in session:
+                return redirect(url_for(session["redirect"]))
+            else:
+                return redirect(url_for('home'))
         except Exception as e:
             print(e)
 
@@ -156,7 +161,6 @@ def register():
         return redirect(url_for("home"))
     form = RegisterForm()
     if request.method == "POST":
-        print(request.form)
         email = request.form["email"]
         first_name = request.form["first_name"]
         password = request.form["password"]
