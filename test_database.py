@@ -13,7 +13,6 @@ engine = create_engine(db_url)
 conn = engine.connect()
 
 
-
 def loginCustomer(email, password):
     result = conn.execute(
         text(
@@ -46,7 +45,7 @@ def getAllReviews(user_id, sort_parameter=None, sort_method=None):
         f" order by {sort_parameter} {sql_sort_method_string}" if sort_parameter else ""
     )
     sql_review_string = (
-        f"select name, price, num_stars from product_reviews join customer_product_review using(product_review_id)\
+        f"select product_id, name, price, num_stars from product_reviews join customer_product_review using(product_review_id)\
                                 join products using(product_id) where customer_id = {user_id}"
         + sql_review_order_by_string
     )
@@ -56,7 +55,7 @@ def getAllReviews(user_id, sort_parameter=None, sort_method=None):
 
     result_list = [r for r in result]
     result_list = [
-        tuple(x if i != 2 else "⭐" * x for i, x in enumerate(result))
+        tuple(x if i != 3 else "⭐" * x for i, x in enumerate(result))
         for result in result_list
     ]
     return result_list
@@ -66,17 +65,18 @@ def getAllPurchases(user_id, sort_parameter=None, sort_method=None, query=None):
     if not query:
         sql_sort_method_string = "asc" if sort_method == "🔼" else "desc"
         sql_purchase_order_by_string = (
-            f" order by {sort_parameter} {sql_sort_method_string}" if sort_parameter else ""
+            f" order by {sort_parameter} {sql_sort_method_string}"
+            if sort_parameter
+            else ""
         )
     else:
         sql_purchase_order_by_string = f" and category_name LIKE '%{query}%'"
-        
+
     sql_review_string = (
-        f"select name, price, category_name, product_quantity from customer_products join products using(product_id)\
+        f"select product_id, name, price, category_name, product_quantity from customer_products join products using(product_id)\
  join product_categories using(category_id) where customer_id = {user_id}"
         + sql_purchase_order_by_string
     )
-    print(sql_review_string)
     with Session(engine) as session:
         result = session.execute(text(sql_review_string))
 
@@ -90,14 +90,20 @@ def getCustomerInfo(cust_id):
     )
     return [r for r in result]
 
+
 def getProduct(id):
-    result = conn.execute(text(f"select product_id, name, price, image, short_description, designer, category_name from products join product_categories using (category_id) where product_id = {id}"))
+    result = conn.execute(
+        text(
+            f"select product_id, name, price, image, short_description, designer, category_name from products join product_categories using (category_id) where product_id = {id}"
+        )
+    )
     return [r for r in result]
 
-if __name__ == '__main__':
-    #loginCustomer('test@gmail.com','12345')
-    #print(checkEmail('test123123@gmail.com'))
-    #result = conn.execute(text("select * from customers"))
-    #print(getProduct(102065)[0][0])
+
+if __name__ == "__main__":
+    # loginCustomer('test@gmail.com','12345')
+    # print(checkEmail('test123123@gmail.com'))
+    # result = conn.execute(text("select * from customers"))
+    # print(getProduct(102065)[0][0])
 
     conn.rollback()

@@ -10,7 +10,8 @@ h1 {
     text-align: center;
 }
 
-th, td {
+th,
+td {
     padding: 10px;
     text-align: center;
 }
@@ -18,11 +19,18 @@ th, td {
 .table-center {
     margin-left: auto;
     margin-right: auto;
-  }
+}
 
 .image-center {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 50%;
-  }
+}
+
+br#after-image {
+    content: "";
+    margin: 2em;
+    display: block;
+    font-size: 5%;
+}

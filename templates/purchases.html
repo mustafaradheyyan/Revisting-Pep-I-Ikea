@@ -8,7 +8,7 @@
 
 <body>
     <div class="text-right">
-        <a href="{{url_for('logout')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('cart')}}">Cart ({{(cart|length)}})</a><br>
         <a href="{{url_for('logout')}}">Settings</a><br>
         <a href="{{url_for('logout')}}">Sign out</a><br>
     </div>
@@ -30,8 +30,8 @@
             </th>
             <th>
                 <form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" /><input
-                        name="sort_method" value="{{sorted_status[1]}}" type="hidden" /><input name="query" value="{{query}}"
-                        type="text" />&nbsp;<button>{{sorted_status[1]}}<br></button>
+                        name="sort_method" value="{{sorted_status[1]}}" type="hidden" /><input name="query"
+                        value="{{query}}" type="text" />&nbsp;<button>{{sorted_status[1]}}<br></button>
                 </form>
             </th>
             <th>
@@ -43,10 +43,10 @@
         </tr>
         {% for product in products %}
         <tr>
-            <td>{{product[0]}}</td>
-            <td>{{product[1]}}</td>
+            <td><a href="{{url_for('product', id=product[0])}}">{{product[1]}}</a></td>
             <td>{{product[2]}}</td>
             <td>{{product[3]}}</td>
+            <td>{{product[4]}}</td>
         </tr>
         {% endfor %}
     </table>
