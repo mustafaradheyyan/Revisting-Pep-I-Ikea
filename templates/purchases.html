@@ -22,8 +22,9 @@
     <table class="center">
         <tr>
             <th>Name</th>
+            <th>Price Per Unit</th>
             <th>
-                <form method="POST">Price <input name="sort_parameter" value="price" type="hidden" /><input
+                <form method="POST">Total Price <input name="sort_parameter" value="price" type="hidden" /><input
                         name="sort_method" value="{{sorted_status[0]}}"
                         type="hidden" /><button>{{sorted_status[0]}}<br></button>
                 </form>
@@ -45,6 +46,7 @@
         <tr>
             <td><a href="{{url_for('product', id=product[0])}}">{{product[1]}}</a></td>
             <td>{{product[2]}}</td>
+            <td>{{product[2] * product[4]}}</td>
             <td>{{product[3]}}</td>
             <td>{{product[4]}}</td>
         </tr>

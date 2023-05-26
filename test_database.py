@@ -99,11 +99,17 @@ def getProduct(id):
     )
     return [r for r in result]
 
-def buyProduct(customer_id, cart):
-    for item in cart:
-        conn.execute(text(f"INSERT INTO customer_products(customer_id, product_id, product_quantity) VALUES({customer_id}, {item}, {cart[item][0]})"))
 
-    conn.commit()
+def check_customer_product(customer_id, product_id):
+    result = conn.execute(
+        text(
+            f"select * from customer_products where customer_id = '{customer_id}' and product_id = {product_id}"
+        )
+    )
+    if result.first() is None:
+        return False
+    else:
+        return True
 
 
 if __name__ == "__main__":
