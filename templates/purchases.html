@@ -22,23 +22,41 @@
     <table class="center">
         <tr>
             <th>Name</th>
-            <th>Price Per Unit</th>
             <th>
-                <form method="POST">Total Price <input name="sort_parameter" value="price" type="hidden" /><input
-                        name="sort_method" value="{{sorted_status[0]}}"
-                        type="hidden" /><button>{{sorted_status[0]}}<br></button>
+                <form method="POST">Price Per Unit <input name="sort_parameter" value="price" type="hidden" />
+                    {% if sort_parameter == "price" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
                 </form>
             </th>
             <th>
-                <form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" /><input
-                        name="sort_method" value="{{sorted_status[1]}}" type="hidden" /><input name="query"
-                        value="{{query}}" type="text" />&nbsp;<button>{{sorted_status[1]}}<br></button>
+                <form method="POST">Total Price <input name="sort_parameter" value="total_price" type="hidden" />
+                    {% if sort_parameter == "total_price" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
                 </form>
             </th>
             <th>
-                <form method="POST">Quantity <input name="sort_parameter" value="product_quantity"
-                        type="hidden" /><input name="sort_method" value="{{sorted_status[2]}}"
-                        type="hidden" /><button>{{sorted_status[2]}}<br></button>
+                <form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" />
+                    <input name="query" value="{{query}}" type="text" />&nbsp;
+                    {% if sort_parameter == "category_name" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Quantity <input name="sort_parameter" value="product_quantity" type="hidden" />
+                    {% if sort_parameter == "product_quantity" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
                 </form>
             </th>
         </tr>

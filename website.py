@@ -87,24 +87,17 @@ def reviews():
 @app.route("/purchase_history/", methods=["GET", "POST"])
 def purchase_history():
     if "user_id" in session:
-        sorted_status = ["🔽", "🔽"]
+        query_parameter = ""
         sort_parameter = None
         sort_method = None
-        query_parameter = ""
-
+        
         if request.method == "POST":
             sort_parameter = request.form["sort_parameter"]
-            sort_method = request.form["sort_method"]
+            sort_method = request.form.get("sort_method")
+            sort_method = "🔼" if sort_method == "🔽" else "🔽"
 
-            match sort_parameter:
-                case "price":
-                    sorted_status = ["🔽" if "🔽" != sort_method else "🔼", "🔽", "🔽"]
-                case "category_name":
-                    query_parameter = request.form["query"]
-                    if not query_parameter:
-                        sorted_status = ["🔽", "🔽" if "🔽" != sort_method else "🔼", "🔽"]
-                case "product_quantity":
-                    sorted_status = ["🔽", "🔽", "🔽" if "🔽" != sort_method else "🔼"]
+            if "query" in request.form:
+                query_parameter = request.form["query"]
 
         purchase_history = test_database.getAllPurchases(
             session["user_id"], sort_parameter, sort_method, query_parameter
@@ -113,7 +106,8 @@ def purchase_history():
         return render_template(
             "purchases.html",
             products=purchase_history,
-            sorted_status=sorted_status,
+            sort_parameter=sort_parameter,
+            sort_method=sort_method,
             query=query_parameter,
         )
     else:
