@@ -99,6 +99,12 @@ def getProduct(id):
     )
     return [r for r in result]
 
+def buyProduct(customer_id, cart):
+    for item in cart:
+        conn.execute(text(f"INSERT INTO customer_products(customer_id, product_id, product_quantity) VALUES({customer_id}, {item}, {cart[item][0]})"))
+
+    conn.commit()
+
 
 if __name__ == "__main__":
     # loginCustomer('test@gmail.com','12345')

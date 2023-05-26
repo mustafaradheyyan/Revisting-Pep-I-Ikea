@@ -5,12 +5,8 @@ from wtforms.validators import InputRequired, Length, ValidationError
 import test_database
 import add_database
 
-
-
 app = Flask(__name__)
 app.secret_key = "temp"
-
-
 
 class RegisterForm(FlaskForm):
     email = StringField(
@@ -182,7 +178,6 @@ def logout():
     return redirect(url_for("login"))
 
 
-
 @app.route("/home")
 def home():
     #for x in raw:
@@ -196,14 +191,35 @@ def product(id):
             adding_to_cart.append(id)
             session['cart'] = adding_to_cart
             return redirect(url_for('home'))
+        elif request.form.get('back_button') == 'Back':
+            return redirect(url_for('home'))
         
     return render_template('product.html', product=test_database.getProduct(id), cart=session['cart'])
 
-@app.route("/cart")
+@app.route("/cart", methods=["GET", "POST"])
 def cart():
-    return render_template('cart.html', cart=session['cart'])
+    cart_list = session['cart']
+    total = 0
+    cart_dict = {}
+    if (cart_list):
+        cart_dict = {i:[cart_list.count(i),
+                        test_database.getProduct(i)[0][1],
+                        test_database.getProduct(i)[0][2],
+                        test_database.getProduct(i)[0][2] * cart_list.count(i)] for i in cart_list}
+        for item in cart_dict:
+            total += cart_dict[item][3]
 
-  
-  
+    if request.method == 'POST':
+        if request.form.get('buy_cart_button') == "Purchase Cart":
+            test_database.buyProduct(session['user_id'], cart_dict)
+            session['cart'] = list()
+            return redirect(url_for('home'))
+        elif request.form.get('clear_cart_button') == "Clear Cart":
+            session['cart'] = list()
+            return redirect(url_for('cart'))
+
+
+    return render_template('cart.html', cart=cart_dict, total=total)
+
 if __name__ == "__main__":
     app.run(debug=True)
