@@ -75,7 +75,7 @@ def getAllPurchases(user_id, sort_parameter=None, sort_method=None, query=None):
         sql_purchase_order_by_string = ""
 
     sql_review_string = (
-        f"select product_id, name, price, category_name, product_quantity from customer_products join products using(product_id)\
+        f"select product_id, name, price, category_name, product_quantity, customer_id from customer_products join products using(product_id)\
  join product_categories using(category_id) where customer_id = {user_id}"
         + sql_purchase_order_by_string
     )

@@ -59,6 +59,7 @@
                     {% endif %}
                 </form>
             </th>
+            <th>Review</th>
         </tr>
         {% for product in products %}
         <tr>
@@ -67,6 +68,7 @@
             <td>{{product[2] * product[4]}}</td>
             <td>{{product[3]}}</td>
             <td>{{product[4]}}</td>
+            <td><a href="{{url_for('product_review', id=product[0], customer_id=product[5])}}"><button>Add Review<br></button></a></td>
         </tr>
         {% endfor %}
     </table>

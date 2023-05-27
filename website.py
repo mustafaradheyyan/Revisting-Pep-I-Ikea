@@ -90,7 +90,7 @@ def purchase_history():
         query_parameter = ""
         sort_parameter = None
         sort_method = None
-        
+
         if request.method == "POST":
             sort_parameter = request.form["sort_parameter"]
             sort_method = request.form.get("sort_method")
@@ -195,6 +195,37 @@ def product(id):
 
     return render_template(
         "product.html", product=test_database.getProduct(id), cart=session["cart"]
+    )
+
+
+@app.route("/product/<id>/<customer_id>/", methods=["GET", "POST"])
+def product_review(id, customer_id):
+    rating_value = ""
+
+    if request.method == "POST":
+        if request.form.get("add_cart_button") == "Add to Cart":
+            adding_to_cart = session["cart"]
+            adding_to_cart.append(id)
+            session["cart"] = adding_to_cart
+            return redirect(url_for("home"))
+        elif request.form.get("back_button") == "Back":
+            return redirect(url_for("home"))
+        elif request.form.get("rating"):
+            rating_value = int(request.form.get("rating"))
+        elif request.form.get("submit_rating_button"):
+            print(request.form)
+            add_database.add_review(
+                id, customer_id, int(request.form.get("submit_rating_button"))
+            )
+            return render_template(
+                "rating_submission.html", product=test_database.getProduct(id)
+            )
+
+    return render_template(
+        "product_review.html",
+        product=test_database.getProduct(id),
+        cart=session["cart"],
+        rating=rating_value,
     )
 
 
