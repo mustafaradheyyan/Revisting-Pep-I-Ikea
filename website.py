@@ -174,11 +174,33 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 def home():
-    # for x in raw:
+    query_parameter = ""
+    sort_parameter = None
+    sort_method = None
+
+    if request.method == "POST":
+        sort_parameter = request.form["sort_parameter"]
+        sort_method = request.form.get("sort_method")
+        sort_method = "🔼" if sort_method == "🔽" else "🔽"
+
+        if "query" in request.form:
+            query_parameter = request.form["query"]
+
+    print(query_parameter)
+
+    products = test_database.getAllProducts(
+        sort_parameter, sort_method, query_parameter
+    )
+
     return render_template(
-        "main.html", products=test_database.getAllProducts(), cart=session["cart"]
+        "main.html",
+        products=products,
+        sort_parameter=sort_parameter,
+        sort_method=sort_method,
+        query=query_parameter,
+        cart=session["cart"],
     )
 
 
@@ -249,7 +271,7 @@ def cart():
 
     if request.method == "POST":
         if request.form.get("buy_cart_button") == "Purchase Cart":
-            add_database.buyProduct(session["user_id"], cart_dict)
+            test_database.buyProduct(session["user_id"], cart_dict)
             session["cart"] = list()
             return redirect(url_for("home"))
         elif request.form.get("clear_cart_button") == "Clear Cart":

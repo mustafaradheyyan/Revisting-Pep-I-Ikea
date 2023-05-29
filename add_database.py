@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from test_database import conn, check_customer_product
+from test_database import conn
 
 
 def addCustomer(email, first_name, password):
@@ -16,23 +16,6 @@ def addCustomer(email, first_name, password):
     for res in result:
         return_id = res[0]
     return return_id
-
-
-def buyProduct(customer_id, cart):
-    for item in cart:
-        if check_customer_product(customer_id, item):
-            conn.execute(
-                text(
-                    f"UPDATE customer_products set product_quantity = product_quantity + {cart[item][0]} where product_id = {item}"
-                )
-            )
-        else:
-            conn.execute(
-                text(
-                    f"INSERT INTO customer_products(customer_id, product_id, product_quantity) VALUES({customer_id}, {item}, {cart[item][0]})"
-                )
-            )
-    conn.commit()
 
 
 def add_review(product_id, customer_id, number_of_stars):
