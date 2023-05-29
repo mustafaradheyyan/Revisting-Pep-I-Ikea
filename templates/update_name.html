@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/product.css') }}">
+    <title>Update Name</title>
+</head>
+
+<body>
+    <br><br>
+    <div class="text-center">
+        <form method="post">
+            <input type="text" name="name" placeholder="New Name" minlength="2"
+            value="{{ request.form['name'] }}"></input><br><br>
+
+            <input type="submit" value="Cancel" name="Cancel">
+            <input type="submit" value="Confirm" name="Confirm">
+        </form><br>
+    </div>
+</body>

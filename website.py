@@ -30,7 +30,6 @@ class RegisterForm(FlaskForm):
                 "That email already exists. Please choose a different one."
             )
 
-
     def add_email(self, email, first_name, password):
         return add_database.addCustomer(email, first_name, password)
 
@@ -49,7 +48,7 @@ class LoginForm(FlaskForm):
 
     def validate_login(self, email, password):
         user = test_database.loginCustomer(email, password)
-        if user is None:
+        if user is None or user == -1:
             raise ValidationError(
                 "Login failed. Please check your email and password again."
             )
@@ -181,7 +180,10 @@ def logout():
 @app.route("/home")
 def home():
     #for x in raw:
-    return render_template('main.html', products=test_database.getAllProducts(), cart=session['cart'])
+    if "user_id" in session:
+        return render_template('main.html', products=test_database.getAllProducts(), cart=session['cart'])
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/product/<id>", methods=["GET", "POST"])
 def product(id):
@@ -223,7 +225,39 @@ def cart():
 
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
-    return render_template('settings.html')
+    if request.method == 'POST':
+        if request.form.get('pur_hist_button') == "Purchase History":
+            return redirect(url_for('purchase_history'))
+        elif request.form.get('review_button') == "Reviews":
+            return redirect(url_for('reviews'))
+        elif request.form.get('update_acc_button') == "Update Name":
+            return redirect(url_for('update_name'))
+        elif request.form.get('delete_acc_button') == "Delete Account":
+            return redirect(url_for('delete_account'))
+        
+    return render_template('settings.html', cart=session['cart'])
 
+@app.route("/settings/update_name", methods=["GET", "POST"])
+def update_name():
+    if request.method == 'POST':
+        if request.form.get('Cancel') == "Cancel":
+            return redirect(url_for('settings'))
+        elif request.form.get('Confirm') == "Confirm":
+            test_database.changeName(session['user_id'], request.form['name'])
+            return redirect(url_for('settings'))
+    
+    return render_template('update_name.html', cart=session['cart'])
+        
+@app.route('/settings/delete_account', methods=["GET", "POST"])
+def delete_account():
+    if request.method == 'POST':
+        if request.form.get('Cancel') == "Cancel":
+            return redirect(url_for('settings'))
+        elif request.form.get('Confirm') == "Confirm":
+            del_user = session['user_id']
+            test_database.deleteUser(del_user)
+            return redirect(url_for('logout'))
+
+    return render_template('delete_acc.html', cart=session['cart'])
 if __name__ == "__main__":
     app.run(debug=True)
