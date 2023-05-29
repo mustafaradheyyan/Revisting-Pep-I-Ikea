@@ -221,5 +221,9 @@ def cart():
 
     return render_template('cart.html', cart=cart_dict, total=total)
 
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    return render_template('settings.html')
+
 if __name__ == "__main__":
     app.run(debug=True)

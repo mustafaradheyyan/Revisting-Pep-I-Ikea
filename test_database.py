@@ -105,11 +105,18 @@ def buyProduct(customer_id, cart):
 
     conn.commit()
 
+def changeName(customer_id, new_name):
+    conn.execute(text(f"UPDATE customers set first_name = '{new_name}' where customer_id = {customer_id}"))
+    conn.commit()
+
+def deleteUser(customer_id):
+    conn.execute(text(f'DELETE FROM customers WHERE customer_id = {customer_id}'))
+    conn.commit()
+
 
 if __name__ == "__main__":
     # loginCustomer('test@gmail.com','12345')
     # print(checkEmail('test123123@gmail.com'))
     # result = conn.execute(text("select * from customers"))
     # print(getProduct(102065)[0][0])
-
     conn.rollback()
