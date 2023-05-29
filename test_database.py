@@ -101,7 +101,7 @@ def getProduct(id):
 
 def buyProduct(customer_id, cart):
     for item in cart:
-        conn.execute(text(f"INSERT INTO customer_products(customer_id, product_id, product_quantity) VALUES({customer_id}, {item}, {cart[item][0]})"))
+        conn.execute(text(f"INSERT INTO customer_products(customer_id, product_id, purchase_date, product_quantity) VALUES({customer_id}, {item}, NOW(), {cart[item][0]})"))
 
     conn.commit()
 
