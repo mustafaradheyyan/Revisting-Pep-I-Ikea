@@ -244,7 +244,7 @@ def product_review(id, customer_id):
             )
             return render_template(
                 "rating_submission.html", product=test_database.getProduct(id)
-            )
+            ), {"Refresh": f"1.25; url={url_for('purchase_history')}"}
 
     return render_template(
         "product_review.html",
