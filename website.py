@@ -176,30 +176,34 @@ def logout():
 
 @app.route("/home", methods=["GET", "POST"])
 def home():
-    query_parameter = ""
-    sort_parameter = None
-    sort_method = None
+    if "user_id" in session:
+        query_parameter = ""
+        sort_parameter = None
+        sort_method = None
 
-    if request.method == "POST":
-        sort_parameter = request.form["sort_parameter"]
-        sort_method = request.form.get("sort_method")
-        sort_method = "🔼" if sort_method == "🔽" else "🔽"
+        if request.method == "POST":
+            sort_parameter = request.form["sort_parameter"]
+            sort_method = request.form.get("sort_method")
+            sort_method = "🔼" if sort_method == "🔽" else "🔽"
 
-        if "query" in request.form:
-            query_parameter = request.form["query"]
+            if "query" in request.form:
+                query_parameter = request.form["query"]
 
-    products = test_database.getAllProducts(
-        sort_parameter, sort_method, query_parameter
-    )
+        products = test_database.getAllProducts(
+            sort_parameter, sort_method, query_parameter
+        )
 
-    return render_template(
-        "main.html",
-        products=products,
-        sort_parameter=sort_parameter,
-        sort_method=sort_method,
-        query=query_parameter,
-        cart=session["cart"],
-    )
+        return render_template(
+            "main.html",
+            products=products,
+            sort_parameter=sort_parameter,
+            sort_method=sort_method,
+            query=query_parameter,
+            cart=session["cart"],
+        )
+    else:
+        session["redirect"] = "home"
+        return redirect(url_for("login"))
 
 
 @app.route("/product/<id>", methods=["GET", "POST"])
