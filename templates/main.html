@@ -22,16 +22,52 @@
     <table class="center">
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th id="description">Description</th>
-            <th>Price</th>
+            <th>
+                <form method="POST">Name <input name="sort_parameter" value="name" type="hidden" />
+                    {% if sort_parameter == "name" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" />
+                    <input name="query" value="{{query}}" type="text" />&nbsp;
+                    {% if sort_parameter == "category_name" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Description <input name="sort_parameter" value="short_description" type="hidden" />
+                    {% if sort_parameter == "short_description" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Price <input name="sort_parameter" value="price" type="hidden" />
+                    {% if sort_parameter == "price" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
         </tr>
+
         {% for product in products %}
         <tr>
             <td><a href="{{url_for('product', id=product[0])}}">{{product[0]}}</a></td>
             <td>{{product[1]}}</td>
-            <td id="description">{{product[6]}}</td>
-            <td>${{product[3]}}</td>
+            <td>{{product[2]}}</td>
+            <td id="description">{{product[3]}}</td>
+            <td>${{product[4]}}</td>
         </tr>
         {% endfor %}
     </table>

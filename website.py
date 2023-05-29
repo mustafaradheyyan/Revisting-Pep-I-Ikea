@@ -8,6 +8,7 @@ import add_database
 app = Flask(__name__)
 app.secret_key = "temp"
 
+
 class RegisterForm(FlaskForm):
     email = StringField(
         validators=[InputRequired(), Length(min=4, max=50)],
@@ -23,7 +24,6 @@ class RegisterForm(FlaskForm):
     )
     submit = SubmitField("Register")
 
-
     def validate_email(self, email):
         if not test_database.checkEmail(email):
             raise ValidationError(
@@ -32,7 +32,6 @@ class RegisterForm(FlaskForm):
 
     def add_email(self, email, first_name, password):
         return add_database.addCustomer(email, first_name, password)
-
 
 
 class LoginForm(FlaskForm):
@@ -56,14 +55,13 @@ class LoginForm(FlaskForm):
             return user
 
 
-
 @app.route("/reviews/", methods=["GET", "POST"])
 def reviews():
     if "user_id" in session:
         sorted_status = ["🔽", "🔽"]
         sort_parameter = None
         sort_method = None
-        
+
         if request.method == "POST":
             sort_parameter = request.form["sort_parameter"]
             sort_method = request.form["sort_method"]
@@ -74,7 +72,9 @@ def reviews():
                 case "num_stars":
                     sorted_status = ["🔽", "🔽" if "🔽" != sort_method else "🔼"]
 
-        reviews = test_database.getAllReviews(session["user_id"], sort_parameter, sort_method)
+        reviews = test_database.getAllReviews(
+            session["user_id"], sort_parameter, sort_method
+        )
 
         return render_template(
             "reviews.html", reviews=reviews, sorted_status=sorted_status
@@ -84,36 +84,35 @@ def reviews():
         return redirect(url_for("login"))
 
 
-
 @app.route("/purchase_history/", methods=["GET", "POST"])
 def purchase_history():
     if "user_id" in session:
-        sorted_status = ["🔽", "🔽"]
+        query_parameter = ""
         sort_parameter = None
         sort_method = None
-        query_parameter = ""
-        
+
         if request.method == "POST":
             sort_parameter = request.form["sort_parameter"]
-            sort_method = request.form["sort_method"]
+            sort_method = request.form.get("sort_method")
+            sort_method = "🔼" if sort_method == "🔽" else "🔽"
 
-            match sort_parameter:
-                case "price":
-                    sorted_status = ["🔽" if "🔽" != sort_method else "🔼", "🔽", "🔽"]
-                case "category_name":
-                    query_parameter = request.form["query"]
-                    if not query_parameter:
-                        sorted_status = ["🔽", "🔽" if "🔽" != sort_method else "🔼", "🔽"]
-                case "product_quantity":
-                    sorted_status = ["🔽", "🔽", "🔽" if "🔽" != sort_method else "🔼"]
-        
-        purchase_history = test_database.getAllPurchases(session["user_id"], sort_parameter, sort_method, query_parameter)
+            if "query" in request.form:
+                query_parameter = request.form["query"]
 
-        return render_template("purchases.html", products=purchase_history, sorted_status=sorted_status, query=query_parameter)
+        purchase_history = test_database.getAllPurchases(
+            session["user_id"], sort_parameter, sort_method, query_parameter
+        )
+
+        return render_template(
+            "purchases.html",
+            products=purchase_history,
+            sort_parameter=sort_parameter,
+            sort_method=sort_method,
+            query=query_parameter,
+        )
     else:
         session["redirect"] = "purchase_history"
         return redirect(url_for("login"))
-
 
 
 @app.route("/")
@@ -137,17 +136,16 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         try:
-            session['user_id'] = form.validate_login(email, password)
-            session['cart'] = list()
+            session["user_id"] = form.validate_login(email, password)
+            session["cart"] = list()
             if "redirect" in session:
                 return redirect(url_for(session["redirect"]))
             else:
-                return redirect(url_for('home'))
+                return redirect(url_for("home"))
         except Exception as e:
             print(e)
 
     return render_template("login.html", form=form)
-
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -161,14 +159,13 @@ def register():
         password = request.form["password"]
         try:
             form.validate_email(email)
-            session['user_id'] = form.add_email(email, first_name, password)
-            session['cart'] = list()
-            return redirect(url_for('home'))
+            session["user_id"] = form.add_email(email, first_name, password)
+            session["cart"] = list()
+            return redirect(url_for("home"))
         except Exception as e:
             print(e)
 
     return render_template("register.html", form=form)
-
 
 
 @app.route("/logout")
@@ -177,51 +174,115 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 def home():
-    #for x in raw:
     if "user_id" in session:
-        return render_template('main.html', products=test_database.getAllProducts(), cart=session['cart'])
+        query_parameter = ""
+        sort_parameter = None
+        sort_method = None
+
+        if request.method == "POST":
+            sort_parameter = request.form["sort_parameter"]
+            sort_method = request.form.get("sort_method")
+            sort_method = "🔼" if sort_method == "🔽" else "🔽"
+
+            if "query" in request.form:
+                query_parameter = request.form["query"]
+
+        products = test_database.getAllProducts(
+            sort_parameter, sort_method, query_parameter
+        )
+
+        return render_template(
+            "main.html",
+            products=products,
+            sort_parameter=sort_parameter,
+            sort_method=sort_method,
+            query=query_parameter,
+            cart=session["cart"],
+        )
     else:
-        return redirect(url_for('login'))
+        session["redirect"] = "home"
+        return redirect(url_for("login"))
+
+
 
 @app.route("/product/<id>", methods=["GET", "POST"])
 def product(id):
-    if request.method == 'POST':
-        if request.form.get('add_cart_button') == 'Add to Cart':
-            adding_to_cart = session['cart']
+    if request.method == "POST":
+        if request.form.get("add_cart_button") == "Add to Cart":
+            adding_to_cart = session["cart"]
             adding_to_cart.append(id)
-            session['cart'] = adding_to_cart
-            return redirect(url_for('home'))
-        elif request.form.get('back_button') == 'Back':
-            return redirect(url_for('home'))
-        
-    return render_template('product.html', product=test_database.getProduct(id), cart=session['cart'])
+            session["cart"] = adding_to_cart
+            return redirect(url_for("home"))
+        elif request.form.get("back_button") == "Back":
+            return redirect(url_for("home"))
+
+    return render_template(
+        "product.html", product=test_database.getProduct(id), cart=session["cart"]
+    )
+
+
+@app.route("/product/<id>/<customer_id>/", methods=["GET", "POST"])
+def product_review(id, customer_id):
+    rating_value = ""
+
+    if request.method == "POST":
+        if request.form.get("add_cart_button") == "Add to Cart":
+            adding_to_cart = session["cart"]
+            adding_to_cart.append(id)
+            session["cart"] = adding_to_cart
+            return redirect(url_for("home"))
+        elif request.form.get("back_button") == "Back":
+            return redirect(url_for("home"))
+        elif request.form.get("rating"):
+            rating_value = int(request.form.get("rating"))
+        elif request.form.get("submit_rating_button"):
+            print(request.form)
+            add_database.add_review(
+                id, customer_id, int(request.form.get("submit_rating_button"))
+            )
+            return render_template(
+                "rating_submission.html", product=test_database.getProduct(id)
+            )
+
+    return render_template(
+        "product_review.html",
+        product=test_database.getProduct(id),
+        cart=session["cart"],
+        rating=rating_value,
+    )
+
 
 @app.route("/cart", methods=["GET", "POST"])
 def cart():
-    cart_list = session['cart']
+    cart_list = session["cart"]
     total = 0
     cart_dict = {}
-    if (cart_list):
-        cart_dict = {i:[cart_list.count(i),
-                        test_database.getProduct(i)[0][1],
-                        test_database.getProduct(i)[0][2],
-                        test_database.getProduct(i)[0][2] * cart_list.count(i)] for i in cart_list}
+    if cart_list:
+        cart_dict = {
+            i: [
+                cart_list.count(i),
+                test_database.getProduct(i)[0][1],
+                test_database.getProduct(i)[0][2],
+                test_database.getProduct(i)[0][2] * cart_list.count(i),
+            ]
+            for i in cart_list
+        }
         for item in cart_dict:
             total += cart_dict[item][3]
 
-    if request.method == 'POST':
-        if request.form.get('buy_cart_button') == "Purchase Cart":
-            test_database.buyProduct(session['user_id'], cart_dict)
-            session['cart'] = list()
-            return redirect(url_for('home'))
-        elif request.form.get('clear_cart_button') == "Clear Cart":
-            session['cart'] = list()
-            return redirect(url_for('cart'))
+    if request.method == "POST":
+        if request.form.get("buy_cart_button") == "Purchase Cart":
+            test_database.buyProduct(session["user_id"], cart_dict)
+            session["cart"] = list()
+            return redirect(url_for("home"))
+        elif request.form.get("clear_cart_button") == "Clear Cart":
+            session["cart"] = list()
+            return redirect(url_for("cart"))
 
+    return render_template("cart.html", cart=cart_dict, total=total)
 
-    return render_template('cart.html', cart=cart_dict, total=total)
 
 @app.route("/settings", methods=["GET", "POST"])
 def settings():

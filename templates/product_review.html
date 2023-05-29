@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/product.css') }}">
+    <title>Main</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('cart')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('logout')}}">Settings</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+        <h1>{{product[0][1]}} - ${{product[0][2]}}</h1>
+    </div>
+
+    <form method="post">
+        <div class="text-center">
+            <p>Please select your rating for {{product[0][1]}}:</p>
+        </div>
+        <div style="text-align: center; width: 100%;">
+            {% for n in range(5) %}
+            <div style="margin: auto; width:150px; text-align:left">
+                <input class="radio" type="radio" id="rating_{{n}}" name="rating" value="{{n + 1}}">
+            </div>
+            {% if rating == (n + 1) %}
+            <button name="rating"><label for="rating_{{n}}">{{'🌠'*(n + 1)}}</label></button><br><br>
+            {% else %}
+            <button name="rating"><label for="rating_{{n}}">{{'⭐'*(n + 1)}}</label></button><br><br>
+            {% endif %}
+            {% endfor %}
+            <button type="submit"><input type="hidden" value="{{rating}}" name="submit_rating_button">Submit
+                Rating</button>
+        </div>
+    </form>
+
+    <br id="after-image"></br><br id="after-image"></br>
+
+    <table class="table-center">
+        <tr>
+            <th>ID</th>
+            <td>{{product[0][0]}}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{product[0][4]}}</td>
+        </tr>
+        <tr>
+            <th>Designer</th>
+            <td>{{product[0][5]}}</td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td>{{product[0][6]}}</td>
+        </tr>
+    </table><br>
+
+    <img class="image-center" src="{{product[0][3]}}" alt="{{product[0][1]}}"><br id="after-image"></br>
+
+    <form method="post">
+        <div class="text-center">
+            <input type="submit" value="Add to Cart" name="add_cart_button"><br><br>
+            <input type="submit" value="Back" name="back_button"><br><br>
+        </div>
+    </form>
+    </div><br>
+</body>
