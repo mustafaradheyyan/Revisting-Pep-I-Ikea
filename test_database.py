@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
+import datetime
 import dbconn
 
 db_username = dbconn.db_username
@@ -19,7 +20,7 @@ def loginCustomer(email, password):
             f"select customer_id from customers where email = '{email}' AND customer_pass = '{password}'"
         )
     )
-    return_id = 0
+    return_id = -1
     for res in result:
         return_id = res[0]
 
@@ -131,13 +132,19 @@ def getProduct(id):
 
 
 def buyProduct(customer_id, cart):
-    for item in cart:
-        conn.execute(
-            text(
-                f"INSERT INTO customer_products(customer_id, product_id, purchase_date, product_quantity) VALUES({customer_id}, {item}, NOW(), {cart[item][0]})"
-            )
-        )
+    x = datetime.datetime.now()
+    current_time = x.strftime('%Y-%m-%d %H:%M:%S')
 
+    for item in cart:
+        conn.execute(text(f"INSERT INTO customer_products(customer_id, product_id, purchase_date, product_quantity) VALUES({customer_id}, {item}, '{current_time}', {cart[item][0]})"))
+    conn.commit()
+
+def changeName(customer_id, new_name):
+    conn.execute(text(f"UPDATE customers set first_name = '{new_name}' where customer_id = {customer_id}"))
+    conn.commit()
+
+def deleteUser(customer_id):
+    conn.execute(text(f'DELETE FROM customers WHERE customer_id = {customer_id}'))
     conn.commit()
 
 
@@ -146,5 +153,5 @@ if __name__ == "__main__":
     # print(checkEmail('test123123@gmail.com'))
     # result = conn.execute(text("select * from customers"))
     # print(getProduct(102065)[0][0])
-
+    #print(loginCustomer('yoelgebre@gmail.com', '123456789'))
     conn.rollback()

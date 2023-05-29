@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/product.css') }}">
+    <title>Settings</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('cart')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('home')}}">Home</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+    </div>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <h1>Settings</h1>
+    <div class="text-center">
+        <form method="post">
+            <input type="submit" value="Purchase History" name="pur_hist_button"><br><br>
+            <input type="submit" value="Reviews" name="review_button"><br><br>
+            <input type="submit" value="Update Name" name="update_acc_button"><br><br>
+            <input type="submit" value="Delete Account" name="delete_acc_button"><br>
+        </form>
+    </div>
+
+</body>
