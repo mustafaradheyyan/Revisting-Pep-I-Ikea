@@ -188,8 +188,6 @@ def home():
         if "query" in request.form:
             query_parameter = request.form["query"]
 
-    print(query_parameter)
-
     products = test_database.getAllProducts(
         sort_parameter, sort_method, query_parameter
     )
