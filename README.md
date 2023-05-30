@@ -11,12 +11,17 @@ Instructions to run this application:
 
 (Step 3 is optional if you did not complete step 2)
 
-3) Go to the backend_products and download all of the files
-    i) Run `pip install -e requirements_exploration.txt`
-    ii) Create a MySQL server locally or on AWS RDS and put the username, password, host and database name (database name is from step 3.iii or name your own) in a file called dbconn.py
-    iii) Run the commands in ikea_products_schema.sql (in the sql_files directory) in your MySQL server
-    iv) Put the dbconn.py file in the same directory as your ikea_exploration.ipynb file.
-    v) Run all of the cells in the ikea_exloration.ipynb file (for cell 61 feel free to stop execution after 30 minutes or sooner)
+3) Go to the backend_products and download all of the files  
+
+    i) Run `pip install -e requirements_exploration.txt`  
+    
+    ii) Create a MySQL server locally or on AWS RDS and put the username, password, host and database name (database name is from step 3.iii or name your own) in a file called dbconn.py  
+    
+    iii) Run the commands in ikea_products_schema.sql (in the sql_files directory) in your MySQL server  
+    
+    iv) Put the dbconn.py file in the same directory as your ikea_exploration.ipynb file.  
+    
+    v) Run all of the cells in the ikea_exloration.ipynb file (for cell 61 feel free to stop execution after 30 minutes or sooner)  
 
 
 4) Put the dbconn.py file in the same directory as the test_database.py file
