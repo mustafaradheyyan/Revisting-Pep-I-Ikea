@@ -11,7 +11,7 @@ The database currently has 355 IKEA products from this website: https://www.kagg
 
 (Step 3 is optional if you did not complete step 2)  
 
-3) Go to the backend_products and download all of the files  
+3) Go to the backend_products directory and download all of the files  
 3.1) Run `pip install -r requirements_exploration.txt`  
 3.2) Create a MySQL server locally or on AWS RDS and put the username, password, host and database name (database name is from step 3.3 or name your own) in a file called dbconn.py  
 3.3) Run the commands in ikea_products_schema.sql (in the sql_files directory) in your MySQL server  
