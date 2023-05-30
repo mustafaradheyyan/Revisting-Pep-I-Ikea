@@ -4,7 +4,7 @@ Retail website API for IKEA products. Front-end website functionality!
 
 The database currently has 355 IKEA products from this website: https://www.kaggle.com/datasets/thedevastator/ikea-product. All of the 355 IKEA products have current valid links, contrary to a large number of IKEA products from the data source. We used web scraping to determine which of the products in the dataset have a valid link, by examining if the image id element that is usually found in valid webpages was present in the list of links that we searched. We stopped at 355 products because the web scraping operation was taking a long time to complete (around 30 minutes to process 355 correct products).
 
-**Instructions to run this application:**
+_**Instructions to run this application:**_
 
 1) Run `pip install -e requirements.txt`
 2) Message our team for the database connection information (dbconn.py)
