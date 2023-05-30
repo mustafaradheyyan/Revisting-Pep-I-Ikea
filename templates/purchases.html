@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+    <title>Main</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('cart')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('settings')}}">Settings</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+    </div>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <h1>My Purchase History</h1>
+
+    <table class="center">
+        <tr>
+            <th>Name</th>
+            <th>
+                <form method="POST">Price Per Unit <input name="sort_parameter" value="price" type="hidden" />
+                    {% if sort_parameter == "price" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Total Price <input name="sort_parameter" value="total_price" type="hidden" />
+                    {% if sort_parameter == "total_price" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Category <input name="sort_parameter" value="category_name" type="hidden" />
+                    <input name="query" value="{{query}}" type="text" />&nbsp;
+                    {% if sort_parameter == "category_name" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Quantity <input name="sort_parameter" value="product_quantity" type="hidden" />
+                    {% if sort_parameter == "product_quantity" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>
+                <form method="POST">Purchase Date <input name="sort_parameter" value="purchase_date" type="hidden" />
+                    {% if sort_parameter == "purchase_date" %}
+                    <button name="sort_method" value="{{sort_method}}">{{sort_method}}<br></button>
+                    {% else %}
+                    <button name="sort_method" value="🔽">🔽<br></button>
+                    {% endif %}
+                </form>
+            </th>
+            <th>Review</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td><a href="{{url_for('product', id=product[0])}}">{{product[1]}}</a></td>
+            <td>{{product[2]}}</td>
+            <td>{{product[2] * product[4]}}</td>
+            <td>{{product[3]}}</td>
+            <td>{{product[4]}}</td>
+            <td>{{product[5]}}</td>
+            <td><a href="{{url_for('product_review', id=product[0], customer_id=product[6])}}"><button>Add
+                        Review<br></button></a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>

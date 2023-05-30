@@ -1,0 +1,41 @@
+h1 {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+.table-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.image-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    height: 30%;
+}
+
+br#after-image {
+    content: "";
+    margin: 2em;
+    display: block;
+    font-size: 5%;
+}
+
+input.radio {
+    display: none;
+}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/product.css') }}">
+    <title>Main</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('cart')}}">Cart ({{(cart|length)}})</a><br>
+        <a href="{{url_for('settings')}}">Settings</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+        <div class="text-center">
+            <p>Thank you for submitting your rating for {{product[0][1]}}!</p>
+        </div>
+    </div>
+        
+</body>

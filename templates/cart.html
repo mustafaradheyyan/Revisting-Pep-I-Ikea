@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/cart.css') }}">
+    <title>Cart</title>
+</head>
+
+<body>
+    <div class="text-right">
+        <a href="{{url_for('home')}}">Home</a><br>
+        <a href="{{url_for('settings')}}">Settings</a><br>
+        <a href="{{url_for('logout')}}">Sign out</a><br>
+    </div>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <h1>Cart</h1>
+    {% if cart %}
+    <table class="table-center">
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+        </tr>
+        {% for item in cart %}
+        <tr>
+            <td><a href="{{url_for('product', id=item)}}">{{cart[item][1]}}</a></td>
+            <td>{{cart[item][0]}}</td>
+            <td>${{cart[item][3]}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th>Total Cost of Cart</th>
+            <th></th>
+            <th>${{total}}</th>
+        </tr>
+    </table><br>
+
+    <div class="text-center">
+        <form method="post">
+            <input type="submit" value="Purchase Cart" name="buy_cart_button"><br><br>
+            <input type="submit" value="Clear Cart" name="clear_cart_button"><br>
+        </form>
+    </div>
+    {% else %}
+    <div class="text-center">
+        <b>Cart is Empty</b>
+    </div>
+
+    {% endif %}
+</body>
