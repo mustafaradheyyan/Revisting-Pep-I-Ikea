@@ -9,7 +9,7 @@ Instructions to run this application:
 1) Run `pip install -e requirements.txt`
 2) Message our team for the database connection information (dbconn.py)
 
-(Step 3 is optional if you did not complete step 2) 
+(Step 3 is optional if you did not complete step 2)
 3) Go to the backend_products and download all of the files
 3.1) Run `pip install -e requirements_exploration.txt`
 3.2) Create a MySQL server locally or on AWS RDS and put the username, password, host and database name (database name is from step 3.3 or name your own) in a file called dbconn.py
